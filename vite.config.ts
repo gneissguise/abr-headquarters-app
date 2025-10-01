@@ -7,12 +7,12 @@ import solid from 'vite-plugin-solid';
 export default defineConfig({
   plugins: [solid()],
   test: {
-    // 👇 This is the entire object now
     environment: 'jsdom',
     globals: true,
     transformMode: {
       web: [/\.[jt]sx?$/],
     },
+    setupFiles: './src/setupTests.ts',
   },
   resolve: {
     conditions: ['development', 'browser'],
