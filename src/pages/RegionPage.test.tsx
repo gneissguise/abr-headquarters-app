@@ -10,17 +10,17 @@ vi.mock('../data/appData', () => ({
 
 // Mocked data element
 const mockProcessedData = {
-  Alaska: {
+  Alaska: { // Import the shared resource
     averageCalories: 175,
     averageFat: 10.5,
     fish: [
       {
-        'Species Name': 'Chinook Salmon',
+        SpeciesName: 'Chinook Salmon',
         Calories: '200',
-        'Fat, Total': '13 g',
+        FatTotal: '13 g',
         Texture: 'Firm',
         Taste: 'Rich',
-        'Species Illustration Photo': {
+        SpeciesIllustrationPhoto: {
           src: 'some-salmon-image.jpg',
           alt: 'A Chinook Salmon',
         },
@@ -40,7 +40,7 @@ describe('<RegionPage />', () => {
     render(() => (
       <MemoryRouter history={history}>
         <Route path="/region/:name" component={RegionPage} />
-      </MemoryRouter>
+      </MemoryRouter>// Import the new Fish ty
     ));
 
     await waitFor(() => {

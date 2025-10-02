@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js';
 import { For, Show } from 'solid-js';
 import { A } from '@solidjs/router';
-import { processedData } from '../data/appData'; // Import the shared resource
+import { processedData } from '../data/appData';
 
 /**
  * @description The home page of the application, which displays a list of regions with their average nutritional information.

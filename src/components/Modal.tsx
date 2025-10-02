@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js';
 import { Show, onCleanup, onMount, createSignal } from 'solid-js';
-import type { Fish } from '../types'; // Import the new Fish type
+import type { Fish } from '../types';
 import './Modal.css';
 
 interface ModalProps {
@@ -32,7 +32,7 @@ export const Modal: Component<ModalProps> = (props) => {
     }
   };
 
-  const prevImage = () => {
+  const prevImage = () => {// Import the new Fish type
     if (hasImages()) {
       setCurrentImageIndex((prevIndex) => (prevIndex - 1 + imageGallery().length) % imageGallery().length);
     }

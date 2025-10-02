@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js';
 import { A } from '@solidjs/router';
 import { For, Show } from 'solid-js';
-import { processedData } from '../data/appData'; // Import the shared resource
+import { processedData } from '../data/appData';
 
 /**
  * @description A navigation bar that dynamically generates links based on the available regions.

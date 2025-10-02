@@ -1,9 +1,9 @@
 import type { Component } from 'solid-js';
 import { createMemo, For, Show, createSignal } from 'solid-js';
 import { useParams } from '@solidjs/router';
-import { processedData } from '../data/appData'; // Import the shared resource
+import { processedData } from '../data/appData';
 import { Modal } from '../components/Modal';
-import type { Fish } from '../types'; // Import the Fish type
+import type { Fish } from '../types';
 
 /**
  * @description A page that displays detailed information about a specific region, including a list of fish found in that region.
@@ -33,24 +33,24 @@ export const RegionPage: Component = () => {
             <>
               <header class="region-header">
                 <h1>{decodeURIComponent(params.name)}</h1>
-                <p>Average Calories: <strong>{currentRegion().averageCalories.toFixed(0)} calories</strong></p>
-                <p>Average Fat: <strong>{currentRegion().averageFat.toFixed(1)} grams</strong></p>
+                <p>Average Calories: <strong>{currentRegion().averageCalories.toFixed(0) + ' calories' || 'N/A'}</strong></p>
+                <p>Average Fat: <strong>{currentRegion().averageFat.toFixed(1) + ' grams' || 'N/A'}</strong></p>
               </header>
 
               <div class="fish-list">
                 <For each={currentRegion().fish}>
                   {(fish) => (
                     <article class="fish-card" onClick={() => openModal(fish)} title="Click to view more details">
-                      <Show when={fish['Species Illustration Photo']?.src}>
+                      <Show when={fish.SpeciesIllustrationPhoto?.src}>
                         <img
-                          src={fish['Species Illustration Photo'].src}
-                          alt={fish['Species Illustration Photo'].alt}
+                          src={fish.SpeciesIllustrationPhoto.src}
+                          alt={fish.SpeciesIllustrationPhoto.alt}
                         />
                       </Show>
                       <div class="fish-details">
-                        <h2>{fish['Species Name']}</h2>
+                        <h2>{fish.SpeciesName}</h2>
                         <p class="stats">
-                          {fish.Calories || 'N/A'} Calories / {fish['Fat, Total'] || 'N/A'} Fat
+                          {fish.Calories || 'N/A'} Calories / {fish.FatTotal || 'N/A'} Fat
                         </p>
                         <div class="description">
                           <strong><u>Taste</u></strong>
