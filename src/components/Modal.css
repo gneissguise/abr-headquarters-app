@@ -1,16 +1,18 @@
+/* Modern Modal Styling */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 21, 41, 0.8); /* Darker, bluish overlay */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
+  backdrop-filter: blur(5px); /* Frosted glass effect */
 }
 
 .modal-overlay.show {
@@ -18,51 +20,62 @@
 }
 
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 1080px;
-  width: 95%;
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 16px; /* More rounded corners */
+  max-width: 1100px;
+  width: 90%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  transform: scale(0.9);
-  transition: transform 0.3s ease-in-out;
-  min-height: 640px;
+  transform: scale(0.95) translateY(-20px);
+  transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
+  opacity: 0;
 }
 
 .modal-overlay.show .modal-content {
-  transform: scale(1);
+  transform: scale(1) translateY(0);
+  opacity: 1;
 }
 
 .modal-close {
   position: absolute;
-  top: 0.5rem;
-  right: 1.5rem;
-  background: transparent;
+  top: 1rem;
+  right: 1rem;
+  background: #f0f2f5;
   border: none;
-  font-size: 2.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #495057;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .modal-close:hover {
-  transform: scale(1.15);
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  background-color: #e9ecef;
+  transform: rotate(90deg);
 }
 
 .modal-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
+/* Carousel Enhancements */
 .carousel {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .carousel-inner {
@@ -75,26 +88,34 @@
 
 .carousel img {
   width: 100%;
-  max-height: 400px;
+  max-height: 450px;
   object-fit: cover;
+  border-radius: 12px;
 }
 
 .carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #003366;
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 1;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .carousel-arrow:hover {
   transform: translateY(-50%) scale(1.1);
+  background-color: white;
 }
 
 .carousel-arrow.prev {
@@ -107,4 +128,11 @@
 
 .fish-info h3 {
   margin-top: 0;
+  font-size: 2rem;
+  color: #003366;
+}
+
+.fish-info p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
 }
