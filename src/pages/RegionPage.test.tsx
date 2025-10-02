@@ -14,16 +14,16 @@ const mockProcessedData = {
     averageFat: 10.5,
     fish: [
       {
-        'Species Name': 'Chinook Salmon',
+        SpeciesName: 'Chinook Salmon',
         Calories: '200',
-        'Fat, Total': '13 g',
+        FatTotal: '13 g',
         Texture: 'Firm',
         Taste: 'Rich',
-        'Species Illustration Photo': {
+        SpeciesIllustrationPhoto: {
           src: 'some-salmon-image.jpg',
           alt: 'A Chinook Salmon',
         },
-        'NOAAFisheriesRegion': 'Alaska', 
+        NOAAFisheriesRegion: 'Alaska', 
       },
     ],
   },

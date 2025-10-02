@@ -1,20 +1,26 @@
-import type { Component } from 'solid-js';
-import { Router, Route } from '@solidjs/router';
+import type { Component, JSX } from 'solid-js';
+import { Route } from '@solidjs/router';
 import HomePage from './pages/HomePage';
-import NavBar from './components/NavBar';
+import { NavBar } from './components/NavBar';
 import { RegionPage} from './pages/RegionPage';
 
-const App: Component = () => {
+const AppLayout = (props: { children: JSX.Element }) => {
   return (
     <>
       <NavBar />
       <main>
-        <Router>
-          <Route path="/" component={HomePage} />
-          <Route path="/region/:name" component={RegionPage} />
-        </Router>
+        {props.children}
       </main>
     </>
+  );
+};
+
+const App: Component = () => {
+  return (
+    <Route path="/" component={AppLayout}>
+      <Route path="" component={HomePage} />
+      <Route path="region/:name" component={RegionPage} />
+    </Route>
   );
 };
 

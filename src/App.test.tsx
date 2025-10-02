@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from 'solid-testing-library';
+import { MemoryRouter, Route } from '@solidjs/router';
 import { vi } from 'vitest';
-import HomePage from './pages/HomePage'; // This import will fail initially
+import HomePage from './pages/HomePage';
 import * as fishDataService from './services/fishData';
 
 // Mock the entire fishData service
@@ -27,14 +28,22 @@ describe('<HomePage />', () => {
     // We also need a mock for fetchFishData, which createResource will call.
     vi.spyOn(fishDataService, 'fetchFishData').mockResolvedValue([]);
 
-    render(() => <HomePage />);
+    render(() => (
+      <MemoryRouter>
+        <Route path="" component={HomePage} />
+      </MemoryRouter>
+    ));
 
     // `waitFor` is essential for async operations like data fetching.
     await waitFor(() => {
       // Check if the Alaska data is rendered correctly
       const alaskaHeader = screen.getByText('Alaska');
-      const alaskaCalories = screen.getByText(/Average Calories: 175/i);
-      const alaskaFat = screen.getByText(/Average Fat: 10.5g/i);
+      const alaskaCalories = screen.getByText((content, element) => {
+        return element.textContent === 'Average Calories: 175 calories';
+      });
+      const alaskaFat = screen.getByText((content, element) => {
+        return element.textContent === 'Average Fat: 10.5 grams';
+      });
 
       expect(alaskaHeader).toBeInTheDocument();
       expect(alaskaCalories).toBeInTheDocument();

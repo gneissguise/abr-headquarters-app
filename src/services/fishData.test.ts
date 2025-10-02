@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { processFishData } from './fishData'; // This import will fail initially
+import { processFishData } from './fishData'; 
 
 /**
  * @description
@@ -9,27 +9,27 @@ import { processFishData } from './fishData'; // This import will fail initially
  */
 const mockFishData = [
   {
-    "Species Name": "Chinook Salmon",
+    "SpeciesName": "Chinook Salmon",
     "Calories": "200",
-    "Fat, Total": "13 g",
+    "FatTotal": "13 g",
     "NOAAFisheriesRegion": "Alaska",
   },
   {
-    "Species Name": "Sockeye Salmon",
+    "SpeciesName": "Sockeye Salmon",
     "Calories": "150",
-    "Fat, Total": "8 g",
+    "FatTotal": "8 g",
     "NOAAFisheriesRegion": "Alaska",
   },
   {
-    "Species Name": "Mahi-mahi",
+    "SpeciesName": "Mahi-mahi",
     "Calories": "85",
-    "Fat, Total": "1 g",
+    "FatTotal": "1 g",
     "NOAAFisheriesRegion": "Pacific Islands",
   },
   {
-    "Species Name": "Opah",
+    "SpeciesName": "Opah",
     "Calories": "115",
-    "Fat, Total": "4 g",
+    "FatTotal": "4 g",
     "NOAAFisheriesRegion": "Pacific Islands",
   },
 ];
@@ -45,7 +45,7 @@ describe('processFishData', () => {
     expect(processedData.Alaska.averageCalories).toBe(175);
     expect(processedData.Alaska.averageFat).toBe(10.5);
     expect(processedData.Alaska.fish.length).toBe(2);
-    expect(processedData.Alaska.fish[0]['Species Name']).toBe('Chinook Salmon');
+    expect(processedData.Alaska.fish[0].SpeciesName).toBe('Chinook Salmon');
 
     // --- Assertions for Pacific Islands ---
     // Average Calories: (85 + 115) / 2 = 100
@@ -54,7 +54,7 @@ describe('processFishData', () => {
     expect(processedData['Pacific Islands'].averageCalories).toBe(100);
     expect(processedData['Pacific Islands'].averageFat).toBe(2.5);
     expect(processedData['Pacific Islands'].fish.length).toBe(2);
-    expect(processedData['Pacific Islands'].fish[0]['Species Name']).toBe('Mahi-mahi');
+    expect(processedData['Pacific Islands'].fish[0].SpeciesName).toBe('Mahi-mahi');
   });
 
   it('should return an empty object if the input array is empty', () => {

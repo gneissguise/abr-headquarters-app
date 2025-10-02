@@ -1,10 +1,10 @@
 // Define a type for the raw fish data we receive from the API
 type RawFish = {
-  "Species Name": string;
+  "SpeciesName": string;
   "Calories": string;
-  "Fat, Total": string;
+  "FatTotal": string;
   "NOAAFisheriesRegion": string;
-  [key: string]: any; // Allow other properties
+  [key: string]: any; // Allow the other properties
 };
 
 // Define the structure for our processed data for a single region
@@ -55,14 +55,22 @@ export const processFishData = (fishData: RawFish[]): ProcessedData => {
       };
     }
 
+    console.log("Fish: ", fish);
+
     // Parse values, cleaning up strings like "13 g"
     const calories = parseInt(fish.Calories, 10);
-    const fat = parseFloat(fish["Fat, Total"]); // parseFloat handles "8 g" -> 8
+    console.log("Fish Calories", fish.Calories, calories)
+    const fat = parseFloat(fish.FatTotal); // parseFloat handles "8 g" -> 8
+    console.log("Fish Fat", fish.FatTotal, fat);
+
 
     // Update totals and add the fish to the list
-    acc[region].totalCalories += calories;
-    acc[region].totalFat += fat;
-    acc[region].count += 1;
+    if (!isNaN(calories) || !isNaN(fat)) {
+      acc[region].totalCalories += calories;
+      acc[region].totalFat += fat;
+      acc[region].count += 1;
+    }
+    
     acc[region].fish.push(fish);
 
     return acc;

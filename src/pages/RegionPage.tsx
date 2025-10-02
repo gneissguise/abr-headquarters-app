@@ -1,7 +1,8 @@
 import type { Component } from 'solid-js';
-import { createMemo, createResource, For, Show } from 'solid-js';
+import { createMemo, createResource, For, Show, createSignal } from 'solid-js';
 import { useParams } from '@solidjs/router';
 import { fetchFishData, processFishData } from '../services/fishData';
+import { Modal } from '../components/Modal';
 
 export const RegionPage: Component = () => {
   // `useParams` is a hook from the router that gives us the dynamic
@@ -19,10 +20,17 @@ export const RegionPage: Component = () => {
   // This is an efficient way to get the specific data for our region.
   const regionData = createMemo(() => {
     const data = processedData();
-    const name = params.name; // e.g., "Alaska"
+    const name = decodeURIComponent(params.name);
+    
     if (!data || !name) return null;
+
     return data[name];
   });
+
+  const [selectedFish, setSelectedFish] = createSignal<any>(null);
+
+  const openModal = (fish: any) => setSelectedFish(fish);
+  const closeModal = () => setSelectedFish(null);
 
   return (
     <div class="region-page">
@@ -31,26 +39,30 @@ export const RegionPage: Component = () => {
           {(currentRegion) => (
             <>
               <header class="region-header">
-                <h1>{params.name}</h1>
-                <p>Average Calories: {currentRegion().averageCalories.toFixed(0)}</p>
-                <p>Average Fat: {currentRegion().averageFat.toFixed(1)}g</p>
+                <h1>{decodeURIComponent(params.name)}</h1>
+                <p>Average Calories: <strong>{currentRegion().averageCalories.toFixed(0) + ' calories' || 'N/A'}</strong></p>
+                <p>Average Fat: <strong>{currentRegion().averageFat.toFixed(1) + ' grams' || 'N/A'}</strong></p>
               </header>
 
               <div class="fish-list">
                 <For each={currentRegion().fish}>
                   {(fish) => (
-                    <article class="fish-card">
+                    <article class="fish-card" onClick={() => openModal(fish)} title="Click to view more details">
                       <img
-                        src={fish['Species Illustration Photo']?.src}
-                        alt={fish['Species Illustration Photo']?.alt}
+                        src={fish?.SpeciesIllustrationPhoto.src}
+                        alt={fish?.SpeciesIllustrationPhoto.alt}
                       />
                       <div class="fish-details">
-                        <h2>{fish['Species Name']}</h2>
+                        <h2>{fish?.SpeciesName}</h2>
                         <p class="stats">
-                          {fish.Calories} Calories / {fish['Fat, Total']} Fat
+                          {fish.Calories || 'N/A'} Calories / {fish.FatTotal || 'N/A'} Fat
                         </p>
                         <p class="description">
-                          Taste: {fish.Taste} | Texture: {fish.Texture}
+                          <strong><u>Taste</u></strong>
+                          <em innerHTML={fish.Taste || '<p>N/A</p>'}></em>
+                          <br />
+                          <strong><u>Texture</u></strong>
+                          <em innerHTML={fish.Texture || '<p>N/A</p>'}></em>
                         </p>
                       </div>
                     </article>
@@ -60,6 +72,9 @@ export const RegionPage: Component = () => {
             </>
           )}
         </Show>
+      </Show>
+      <Show when={selectedFish()}> 
+        <Modal fish={selectedFish()} onClose={closeModal} />
       </Show>
     </div>
   );
