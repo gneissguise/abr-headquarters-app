@@ -1,23 +1,4 @@
-// Define a type for the raw fish data we receive from the API
-type RawFish = {
-  "SpeciesName": string;
-  "Calories": string;
-  "FatTotal": string;
-  "NOAAFisheriesRegion": string;
-  [key: string]: any; // Allow the other properties
-};
-
-// Define the structure for our processed data for a single region
-type ProcessedRegion = {
-  averageCalories: number;
-  averageFat: number;
-  fish: RawFish[];
-};
-
-// Define the final output structure, mapping region names to their data
-type ProcessedData = {
-  [region: string]: ProcessedRegion;
-};
+import type { RawFish, ProcessedData } from '../types';
 
 /**
  * @description Takes an array of raw fish data and transforms it into an object
@@ -30,7 +11,6 @@ export const processFishData = (fishData: RawFish[]): ProcessedData => {
     return {};
   }
 
-  // Use a temporary structure to hold sums and counts during reduction
   const initialAccumulator: {
     [region: string]: {
       totalCalories: number;
@@ -40,12 +20,10 @@ export const processFishData = (fishData: RawFish[]): ProcessedData => {
     };
   } = {};
 
-  // 1. Group fish and calculate totals
   const regionalTotals = fishData.reduce((acc, fish) => {
     const region = fish.NOAAFisheriesRegion;
-    if (!region) return acc; // Skip fish with no region
+    if (!region) return acc;
 
-    // Initialize the region in our accumulator if it's the first time we see it
     if (!acc[region]) {
       acc[region] = {
         totalCalories: 0,
@@ -55,19 +33,18 @@ export const processFishData = (fishData: RawFish[]): ProcessedData => {
       };
     }
 
-    console.log("Fish: ", fish);
-
-    // Parse values, cleaning up strings like "13 g"
     const calories = parseInt(fish.Calories, 10);
-    console.log("Fish Calories", fish.Calories, calories)
-    const fat = parseFloat(fish.FatTotal); // parseFloat handles "8 g" -> 8
-    console.log("Fish Fat", fish.FatTotal, fat);
+    const fat = parseFloat(fish.FatTotal);
 
-
-    // Update totals and add the fish to the list
-    if (!isNaN(calories) || !isNaN(fat)) {
+    if (!isNaN(calories)) {
       acc[region].totalCalories += calories;
+    }
+
+    if (!isNaN(fat)) {
       acc[region].totalFat += fat;
+    }
+
+    if (!isNaN(calories) || !isNaN(fat)) {
       acc[region].count += 1;
     }
     
@@ -76,7 +53,6 @@ export const processFishData = (fishData: RawFish[]): ProcessedData => {
     return acc;
   }, initialAccumulator);
 
-  // 2. Calculate averages from the totals
   const result: ProcessedData = {};
   for (const region in regionalTotals) {
     const data = regionalTotals[region];
@@ -95,7 +71,6 @@ export const processFishData = (fishData: RawFish[]): ProcessedData => {
  * @returns {Promise<RawFish[]>} A promise that resolves to the array of fish data.
  */
 export const fetchFishData = async (): Promise<RawFish[]> => {
-  // Requires https://github.com/theabr-org/coding-challenge-server to be running on localhost.
   const API_URL = 'http://localhost:5001/gofish?apikey=abrradiology';
 
   try {

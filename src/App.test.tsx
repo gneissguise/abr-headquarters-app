@@ -1,55 +1,63 @@
-import { render, screen, waitFor } from 'solid-testing-library';
+import { render, screen, waitFor, within } from 'solid-testing-library';
 import { MemoryRouter, Route } from '@solidjs/router';
 import { vi } from 'vitest';
 import HomePage from './pages/HomePage';
-import * as fishDataService from './services/fishData';
 
-// Mock the entire fishData service
-vi.mock('./services/fishData');
+// Mock the appData module
+vi.mock('../data/appData', () => ({
+  processedData: () => mockProcessedData,
+}));
 
 const mockProcessedData = {
   Alaska: {
-    averageCalories: 175,
-    averageFat: 10.5,
+    averageCalories: 114,
+    averageFat: 3.9,
     fish: [/* ... */],
   },
   'Pacific Islands': {
-    averageCalories: 100,
-    averageFat: 2.5,
+    averageCalories: 128,
+    averageFat: 3.2,
+    fish: [/* ... */],
+  },
+  'Greater Atlantic': {
+    averageCalories: 105,
+    averageFat: 2.9,
+    fish: [/* ... */],
+  },
+  'West Coast': {
+    averageCalories: 114,
+    averageFat: 3.6,
+    fish: [/* ... */],
+  },
+  Southeast: {
+    averageCalories: 113,
+    averageFat: 2.7,
     fish: [/* ... */],
   },
 };
 
 describe('<HomePage />', () => {
   it('fetches and displays regional nutrition data', async () => {
-    // Tell our mock function what to return when called
-    vi.spyOn(fishDataService, 'processFishData').mockReturnValue(mockProcessedData);
-    
-    // We also need a mock for fetchFishData, which createResource will call.
-    vi.spyOn(fishDataService, 'fetchFishData').mockResolvedValue([]);
-
     render(() => (
       <MemoryRouter>
         <Route path="" component={HomePage} />
       </MemoryRouter>
     ));
 
-    // `waitFor` is essential for async operations like data fetching.
     await waitFor(() => {
-      // Check if the Alaska data is rendered correctly
-      const alaskaHeader = screen.getByText('Alaska');
-      const alaskaCalories = screen.getByText((content, element) => {
-        return element.textContent === 'Average Calories: 175 calories';
+      const alaskaCard = screen.getByText('Alaska').closest('.region-card');
+      
+      const alaskaCalories = within(alaskaCard).getByText((content, element) => {
+        return element.textContent === 'Average Calories: 114 calories';
       });
-      const alaskaFat = screen.getByText((content, element) => {
-        return element.textContent === 'Average Fat: 10.5 grams';
+      const alaskaFat = within(alaskaCard).getByText((content, element) => {
+        return element.textContent === 'Average Fat: 3.9 grams';
       });
 
-      expect(alaskaHeader).toBeInTheDocument();
+      expect(alaskaCard).toBeInTheDocument();
       expect(alaskaCalories).toBeInTheDocument();
       expect(alaskaFat).toBeInTheDocument();
       
-      // Check for Pacific Islands data as well
       expect(screen.getByText('Pacific Islands')).toBeInTheDocument();
     });
   });

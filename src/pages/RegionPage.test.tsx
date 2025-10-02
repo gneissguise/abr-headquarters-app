@@ -2,10 +2,11 @@ import { render, screen, waitFor } from 'solid-testing-library';
 import { MemoryRouter, Route, createMemoryHistory } from '@solidjs/router';
 import { vi } from 'vitest';
 import { RegionPage } from './RegionPage';
-import * as fishDataService from '../services/fishData';
 
-// Mock for the entire fishData service
-vi.mock('../services/fishData');
+// Mock the appData module
+vi.mock('../data/appData', () => ({
+  processedData: () => mockProcessedData,
+}));
 
 // Mocked data element
 const mockProcessedData = {
@@ -14,12 +15,12 @@ const mockProcessedData = {
     averageFat: 10.5,
     fish: [
       {
-        SpeciesName: 'Chinook Salmon',
+        'Species Name': 'Chinook Salmon',
         Calories: '200',
-        FatTotal: '13 g',
+        'Fat, Total': '13 g',
         Texture: 'Firm',
         Taste: 'Rich',
-        SpeciesIllustrationPhoto: {
+        'Species Illustration Photo': {
           src: 'some-salmon-image.jpg',
           alt: 'A Chinook Salmon',
         },
@@ -31,10 +32,6 @@ const mockProcessedData = {
 
 describe('<RegionPage />', () => {
   it('displays the details for a specific region based on the URL', async () => {
-    // Tell our mock function what to return when called
-    vi.spyOn(fishDataService, 'processFishData').mockReturnValue(mockProcessedData);
-    vi.spyOn(fishDataService, 'fetchFishData').mockResolvedValue([]);
-
     // Create history object
     const history = createMemoryHistory();
     // Set the initial url to the Alaska region
